@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,10 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
-
-
-Route::get("/users", function () {
-    echo "This is User";
-});
+Route::get("/login", [User::class, 'index']);
+Route::post("/auth-user", [User::class, 'auth']);
