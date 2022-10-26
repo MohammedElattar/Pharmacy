@@ -15,8 +15,8 @@ class User extends Controller
     public function index()
     {
         // return login view
-
-        return view("login");
+        $users = DB::select("SELECT `id` , `name` , `email` , `role` , created_at FROM users WHERE id !=?", [session()->get("id")]);
+        return view("layouts.users", ['users_data' => $users]);
     }
 
     public function auth(Request $req)
@@ -47,7 +47,7 @@ class User extends Controller
      */
     public function create()
     {
-        //
+        return view("layouts.add_user");
     }
 
     /**
@@ -58,7 +58,27 @@ class User extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated_data = $request->validate(
+            [
+                "name" => "required|max:20|regex:/^[a-z _]+$/i",
+                "email" => "required|email|unique:users,email",
+                'password' => "required|between:8,20",
+                "role" => 'digits_between:0,2'
+            ],
+            [
+                "name.required" => "name-required",
+                "name.regex" => "name-valid",
+                "name.max" => "name-big",
+                "email.required" => "email-required",
+                "email.email" => "email-valid",
+                "email.unique" => "email-exists",
+                "password.required" => "pass-required",
+                "password.between" => "pass-between",
+                "role.digits_between" => "role-valid"
+            ]
+        );
+        DB::insert("INSERT INTO users (name , email , password , role) VALUES(?,?,?,?)", [$validated_data['name'], $validated_data['email'], sha1($validated_data['password']), $validated_data['role']]);
+        session()->flash("user-added", '1');
     }
 
     /**
@@ -69,18 +89,10 @@ class User extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $user = DB::selectOne("SELECT id , name , email , role FROM users WHERE id =?", [$id]);
+        if ($user != NULL) {
+            return view("layouts.edit_user", ["user" => $user]);
+        } else return redirect(route("users"));
     }
 
     /**
@@ -92,7 +104,32 @@ class User extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated_data = $request->validate(
+            [
+                "name" => "required|max:20|regex:/^[a-z _]+$/i",
+                "email" => "required|email|unique:users,email," . $id, ",id",
+                "password" => "required|between:8,12",
+                "role" => 'digits_between:0,2'
+            ],
+            [
+                "name.required" => "name-required",
+                "name.regex" => "name-valid",
+                "name.max" => "name-big",
+                "email.required" => "email-required",
+                "email.email" => "email-valid",
+                "email.unique" => "email-exists",
+                "password.required" => "pass-required",
+                "password.between" => "pass-between",
+                "role.digits_between" => "role-valid"
+            ]
+        );
+        DB::insert("UPDATE users SET name=? , email=? , role=?,password=? WHERE id =?", [$validated_data['name'], $validated_data['email'], $validated_data['role'], sha1($validated_data['password']), $id]);
+        session()->flash("user-updated", '1');
+        if ($id == session()->get("id")) {
+            session()->put("name", $validated_data['name']);
+            session()->put("email", $validated_data['email']);
+        }
+        return redirect(route("users"));
     }
 
     /**
@@ -103,6 +140,11 @@ class User extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = DB::selectOne("SELECT id FROM users WHERE id =?", [$id]);
+        if ($user) {
+            DB::delete("DELETE FROM users WHERE id =?", [$id]);
+            session()->flash("user-deleted", '1');
+        }
+        return redirect(route("users"));
     }
 }
