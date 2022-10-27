@@ -31,7 +31,17 @@ This project is a way to manage a pharmacy including sales , medicines , custome
 
 - [How to install Xampp](https://www.youtube.com/watch?v=081xcYZKOZA)
 
+- [How to install Composer](https://youtu.be/BGyuKpfMB9E)
+
 - [How to create a database in phpmyadin](https://www.youtube.com/watch?v=IZCi0MTmeqA)
+
+## Installing New Laravel Project To Get The pakages
+
+- First create new laravel project
+
+```console
+composer create-project laravel/laravel example-app
+```
 
 - Open CMD and type the following command
 
@@ -39,7 +49,9 @@ This project is a way to manage a pharmacy including sales , medicines , custome
 git clone https://github.com/MohammedElattar/Pharmacy.git
 ```
 
-- Go to your project directory
+- Go to `Pharmacy` directory and copy all files in it
+
+- paste it in  `example-app`
 
 -Now you need to open `.env` file and you will find that block of code
 
@@ -51,8 +63,14 @@ DB_DATABASE=pharmacy
 
 - next You need to run the migration file and seeders using the following command
 
+-now open `Cmd` in Your `example-app` directory and Type These Commands
+
 ```console
-php artisan migrate&php artian db:seed
+php artisan migrate:refersh
+```
+
+```console
+php artian db:seed
 ```
 
 - Finally You Need To Start The Server
