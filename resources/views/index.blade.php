@@ -39,12 +39,17 @@
                             class="fas fa-building fa-fw me-3"></i><span>Partners</span></a>
                     <a href={{ route('users') }} class="list-group-item list-group-item-action py-2 ripple users"><i
                             class="fas fa-users fa-fw me-3"></i><span>Users</span></a>
+                    <a href={{ route('customer') }}
+                        class="list-group-item list-group-item-action py-2 ripple customer"><i
+                            class="fas fa-users fa-fw me-3"></i><span>Customers</span></a>
                     <a href="#" class="list-group-item list-group-item-action py-2 ripple sales"><i
                             class="fas fa-money-bill fa-fw me-3"></i><span>Sales</span></a>
                     <a href={{ route('logs') }} class="list-group-item list-group-item-action py-2 ripple logs"><i
                             class="fas fa-history fa-fw me-3"></i><span>Logs</span></a>
                     <a href={{ route('medicine_categories') }}
                         class="list-group-item list-group-item-action py-2 ripple categories"><i
+                            class="fa-solid fa-notes-medical fa-fw me-3"></i><span>Categories</span></a>
+                    <a href={{ route('type') }} class="list-group-item list-group-item-action py-2 ripple type"><i
                             class="fa-solid fa-notes-medical fa-fw me-3"></i><span>Medicine Types</span></a>
                 </div>
             </div>

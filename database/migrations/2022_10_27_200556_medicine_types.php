@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create("customers", function (Blueprint $tbl) {
+        Schema::create("medicine_types", function (Blueprint $tbl) {
             $tbl->id();
             $tbl->string("name", 30);
             $tbl->timestamp("created_at")->useCurrent();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('medicine_types');
     }
 };

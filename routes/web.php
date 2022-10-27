@@ -5,6 +5,8 @@ use App\Http\Controllers\Partners;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\medicine_categories;
+use App\Http\Controllers\medicine_types;
+use App\Http\Controllers\customers;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -73,3 +75,21 @@ Route::post("/medicines_categories/store", [medicine_categories::class, 'store']
 Route::get("/medicines_categories/edit/{id}", [medicine_categories::class, 'show'])->name("edit-categories");
 Route::post("/medicines_categories/update/{id}", [medicine_categories::class, 'update'])->name("update-categories");
 Route::get("/medicines_categories/delete/{id}", [medicine_categories::class, 'destroy'])->name("delete-categories");
+
+/* Customers */
+
+Route::get("/customers", [customers::class, 'index'])->name("customer");
+Route::get("/customers/add", [customers::class, 'create'])->name("add-customer");
+Route::post("/customers/store", [customers::class, 'store'])->name("store-customer");
+Route::get("/customers/edit/{id}", [customers::class, 'show'])->name("edit-customer");
+Route::post("/customers/update/{id}", [customers::class, 'update'])->name("update-customer");
+Route::get("/customers/delete/{id}", [customers::class, 'destroy'])->name("delete-customer");
+
+/* Medicine Types */
+
+Route::get("/types", [medicine_types::class, 'index'])->name("type");
+Route::get("/types/add", [medicine_types::class, 'create'])->name("add-type");
+Route::post("/types/store", [medicine_types::class, 'store'])->name("store-type");
+Route::get("/types/edit/{id}", [medicine_types::class, 'show'])->name("edit-type");
+Route::post("/types/update/{id}", [medicine_types::class, 'update'])->name("update-type");
+Route::get("/types/delete/{id}", [medicine_types::class, 'destroy'])->name("delete-type");
