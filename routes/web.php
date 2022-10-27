@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\Logs;
 use App\Http\Controllers\Partners;
 use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\medicine_categories;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -52,7 +53,23 @@ Route::post("/partners/edit/{id}", [Partners::class, 'update'])->name("update-pa
 // delete partner
 Route::get("/partners/delete/{id}", [Partners::class, 'destroy'])->where("id", '[0-9]+')->name("delete-partner");
 
+/* Sales */
+
+// show sales
+
+Route::get("/logs", [Logs::class, 'index'])->name("logs");
+Route::get("/logs/delete/{id}", [Logs::class, 'delete'])->name("delete-log")->where("id", "[0-9]+");
+Route::get("/logs/delete_all", [Logs::class, 'deleteAll'])->name("delete-logs");
 
 // orders
 
 Route::view("/orders", 'layouts.orders')->name("orders");
+
+/* Medicine Categories */
+
+Route::get("/medicine_categories", [medicine_categories::class, 'index'])->name("medicine_categories");
+Route::get("/medicines_categories/add", [medicine_categories::class, 'create'])->name("add-categories");
+Route::post("/medicines_categories/store", [medicine_categories::class, 'store'])->name("store-categories");
+Route::get("/medicines_categories/edit/{id}", [medicine_categories::class, 'show'])->name("edit-categories");
+Route::post("/medicines_categories/update/{id}", [medicine_categories::class, 'update'])->name("update-categories");
+Route::get("/medicines_categories/delete/{id}", [medicine_categories::class, 'destroy'])->name("delete-categories");

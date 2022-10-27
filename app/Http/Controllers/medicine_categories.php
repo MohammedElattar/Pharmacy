@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class Partners extends Controller
+class medicine_categories extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class Partners extends Controller
      */
     public function index()
     {
-        $partners = DB::select("SELECT partner_id as id , name , created_at FROM partners");
-        return view("layouts.partners", ['partners' => $partners]);
+        $cats = DB::select("SELECT * FROM medicine_categories");
+        return view("layouts.medicine_categories.medicine_categories", ['cats' => $cats]);
     }
 
     /**
@@ -25,7 +25,7 @@ class Partners extends Controller
      */
     public function create()
     {
-        return view("layouts.add_partner");
+        return view("layouts.medicine_categories.medicine_categories_add");
     }
 
     /**
@@ -37,16 +37,18 @@ class Partners extends Controller
     public function store(Request $request)
     {
         $validated_data = $request->validate([
-            "name" => "required|regex:/^[a-z _]+$/i|max:30|unique:partners,name"
+            "name" => "required|regex:/^[a-z _]+$/i|max:30|unique:medicine_categories,name"
         ], [
             "name.required" => "name-required",
             "name.unique" => "name-exists",
             "name.regex" => "name-valid",
             "name.max" => "name-big",
         ]);
-        DB::table("partners")->insert(["name" => $validated_data['name']]);
-        session()->flash("partner-added", '1');
-        return redirect(route("partners"));
+        DB::table("medicine_categories")->insert([
+            "name" => $validated_data['name']
+        ]);
+        session()->flash("categories-added", '1');
+        return redirect(route("medicine_categories"));
     }
 
     /**
@@ -57,10 +59,10 @@ class Partners extends Controller
      */
     public function show($id)
     {
-        $partner = DB::selectOne("SELECT name,partner_id FROM partners WHERE partner_id =?", [$id]);
-        if ($partner != NULL) {
-            return view("layouts.edit_partner", ['partner' => $partner]);
-        } else return redirect(route("partners"));
+        $cat = DB::selectOne("SELECT id,name FROM medicine_categories WHERE id =?", [$id]);
+        if ($cat != NULL) {
+            return view("layouts.medicine_categories.medicine_categories_edit", ['cat' => $cat]);
+        } else return redirect(route("medicine_categories"));
     }
 
     /**
@@ -74,21 +76,22 @@ class Partners extends Controller
     {
         $validated_data = $request->validate(
             [
-                "name" => "required|max:20|regex:/^[a-z _]+$/i|unique:partners,name, " . $id . " ,partner_id",
+                "name" => "required|max:20|regex:/^[a-z _]+$/i|unique:medicine_categories,name, " . $id . " ,id",
             ],
             [
                 "name.required" => "name-required",
                 "name.regex" => "name-valid",
                 "name.max" => "name-big",
+                "name.unique" => "name-exists"
             ]
         );
-        DB::insert("UPDATE partners SET name=? , updated_at =?  WHERE partner_id =?", [$validated_data['name'], date("Y-m-d h:i:s"), $id]);
-        session()->flash("partner-updated", '1');
+        DB::insert("UPDATE medicine_categories SET name=? , updated_at =?  WHERE id =?", [$validated_data['name'], date("Y-m-d h:i:s"), $id]);
+        session()->flash("categories-updated", '1');
         DB::table("logs")->insert([
-            "action" => "Partner Info Has Been Updated [ parter ID -> " . $id . " ]",
+            "action" => "Category Info Has Been Updated [ Category ID -> " . $id . " ]",
             "who" => session()->get('id') ? session()->get("id") : 1
         ]);
-        return redirect(route("partners"));
+        return redirect(route("medicine_categories"));
     }
 
     /**
@@ -99,15 +102,15 @@ class Partners extends Controller
      */
     public function destroy($id)
     {
-        $user = DB::selectOne("SELECT partner_id FROM partners WHERE partner_id =?", [$id]);
-        if ($user) {
-            DB::delete("DELETE FROM partners WHERE partner_id =?", [$id]);
-            session()->flash("partner-deleted", '1');
+        $cat = DB::selectOne("SELECT id FROM medicine_categories WHERE id =?", [$id]);
+        if ($cat) {
+            DB::delete("DELETE FROM medicine_categories WHERE id =?", [$id]);
+            session()->flash("categories-deleted", '1');
             DB::table("logs")->insert([
-                "action" => "Partner Has Been Deleted [ parter ID -> " . $id . " ]",
+                "action" => "Category Has Been Deleted [ Category ID -> " . $id . " ]",
                 "who" => session()->get('id') ? session()->get("id") : 1
             ]);
         }
-        return redirect(route("partners"));
+        return redirect(route("medicine_categories"));
     }
 }
