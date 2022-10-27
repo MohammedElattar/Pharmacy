@@ -32,7 +32,7 @@ This project is a way to manage a pharmacy including sales , medicines , custome
 - Next You Need To Install Xampp On Your Machine From the [HERE](https://www.apachefriends.org/download.html) and install it
 
 - Start Your Xampp Apache Server By Clicking Apache And MYSQL like that
-- 
+
 ![Image](https://codezips.com/wp-content/uploads/2020/07/xamppstart.png)
 
 - next you need to open your CMD and run the following command
@@ -74,4 +74,4 @@ php artisan migrate&php artian db:seed
 ### Default Credentials
 
 - Email `admin@admin.com`
--Password `admin`
+- Password `admin`
