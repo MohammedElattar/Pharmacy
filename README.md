@@ -75,6 +75,12 @@ php artisan migrate&php artian db:seed
 php artisan serve
 ```
 
+- Your Project Link
+
+```console
+http://127.0.0.1:8000
+```
+
 - And You Are ready Now to use the project
 
 ### Default Credentials
