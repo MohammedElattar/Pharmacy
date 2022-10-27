@@ -27,6 +27,12 @@ This project is a way to manage a pharmacy including sales , medicines , custome
 
 ## How to install
 
+### Tutorials
+
+- [Composer](https://www.youtube.com/watch?v=BGyuKpfMB9E)
+
+- [Xampp](https://www.youtube.com/watch?v=081xcYZKOZA)
+
 - First you need to composer From [HERE](https://getcomposer.org/download/) and install it based on your machine
 
 - Next You Need To Install Xampp On Your Machine From the [HERE](https://www.apachefriends.org/download.html) and install it
@@ -41,19 +47,13 @@ This project is a way to manage a pharmacy including sales , medicines , custome
 
 - Click on new and type a name of your new DataBase and click **Create**
 
-- Now we are ready to make a new laravel project
-
-- Open Your CMD and type the following command and click **Enter**
+- Now you need to type the following command
 
 ```console
-composer create-project --prefer-dist laravel/laravel project_name
+git clone https://github.com/MohammedElattar/Pharmacy.git
 ```
 
-- Go ahead to your project directory by typing
-
-```console
-cd project_name
-```
+- Go to your project directory
 
 -Now you need to open `.env` file and you will find that block of code
 
