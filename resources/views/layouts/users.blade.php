@@ -1,5 +1,7 @@
 @extends('index')
+@php
 
+@endphp
 @section('title', 'Users')
 @section('content')
     @php

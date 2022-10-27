@@ -15,7 +15,7 @@ class User extends Controller
     public function index()
     {
         // return login view
-        $users = DB::select("SELECT `id` , `name` , `email` , `role` , created_at FROM users WHERE id !=?", [session()->get("id")]);
+        $users = DB::select("SELECT * FROM users" . (session()->has("id") ? " WHERE id != ?" : ""), session()->has("id") ? [session()->get("id")] : []);
         return view("layouts.users", ['users_data' => $users]);
     }
 
@@ -79,6 +79,7 @@ class User extends Controller
         );
         DB::insert("INSERT INTO users (name , email , password , role) VALUES(?,?,?,?)", [$validated_data['name'], $validated_data['email'], sha1($validated_data['password']), $validated_data['role']]);
         session()->flash("user-added", '1');
+        return redirect(route("users"));
     }
 
     /**

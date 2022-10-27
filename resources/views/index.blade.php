@@ -1,4 +1,4 @@
-@php($url = '/pharm/public/')
+@php($url = '/')
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,12 +34,15 @@
                             class="fas fa-chart-line fa-fw me-3"></i><span>Analytics</span></a>
                     <a href={{ route('orders') }} class="list-group-item list-group-item-action py-2 ripple orders"><i
                             class="fas fa-chart-bar fa-fw me-3"></i><span>Orders</span></a>
-                    <a href="#" class="list-group-item list-group-item-action py-2 ripple partners"><i
+                    <a href={{ route('partners') }}
+                        class="list-group-item list-group-item-action py-2 ripple partners"><i
                             class="fas fa-building fa-fw me-3"></i><span>Partners</span></a>
                     <a href={{ route('users') }} class="list-group-item list-group-item-action py-2 ripple users"><i
                             class="fas fa-users fa-fw me-3"></i><span>Users</span></a>
                     <a href="#" class="list-group-item list-group-item-action py-2 ripple sales"><i
                             class="fas fa-money-bill fa-fw me-3"></i><span>Sales</span></a>
+                    <a href="#" class="list-group-item list-group-item-action py-2 ripple sales"><i
+                            class="fas fa-history fa-fw me-3"></i><span>Logs</span></a>
                 </div>
             </div>
         </nav>
@@ -117,5 +120,5 @@
 
 @yield('active')
 <script>
-    document.querySelector(".active").removeAttribute("href")
+    // document.querySelector(".active").removeAttribute("href")
 </script>

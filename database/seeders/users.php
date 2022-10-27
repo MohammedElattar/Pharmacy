@@ -28,14 +28,14 @@ class users extends Seeder
         // for testing
 
 
-        // $faker = \Faker\Factory::create();
-        // for ($i = 0; $i < 100; $i++) {
-        //     DB::table("users")->insert([
-        //         "name" => $faker->name(),
-        //         "email" => $faker->email(),
-        //         "password" => sha1($faker->password(8, 20)),
-        //         "role" => "" . $faker->numberBetween(0, 2)
-        //     ]);
-        // }
+        $faker = \Faker\Factory::create();
+        for ($i = 0; $i < 100; $i++) {
+            DB::table("users")->insert([
+                "name" => $faker->name(),
+                "email" => $faker->email(),
+                "password" => sha1($faker->password(8, 20)),
+                "role" => "" . $faker->numberBetween(0, 2)
+            ]);
+        }
     }
 }
