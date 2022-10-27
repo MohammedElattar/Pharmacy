@@ -69,6 +69,12 @@ DB_DATABASE=laravel
 php artisan migrate&php artian db:seed
 ```
 
+- Finally You Need To Start The Server
+
+```console
+php artisan serve
+```
+
 - And You Are ready Now to use the project
 
 ### Default Credentials
