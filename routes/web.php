@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\medicine_categories;
 use App\Http\Controllers\medicine_types;
 use App\Http\Controllers\customers;
+use App\Http\Controllers\products;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -93,3 +95,16 @@ Route::post("/types/store", [medicine_types::class, 'store'])->name("store-type"
 Route::get("/types/edit/{id}", [medicine_types::class, 'show'])->name("edit-type");
 Route::post("/types/update/{id}", [medicine_types::class, 'update'])->name("update-type");
 Route::get("/types/delete/{id}", [medicine_types::class, 'destroy'])->name("delete-type");
+
+
+/* Inventory */
+
+
+/* Products */
+
+Route::get("/products", [products::class, 'index'])->name("product");
+Route::get("/products/add", [products::class, 'create'])->name("add-product");
+Route::post("/products/store", [products::class, 'store'])->name("store-product");
+Route::get("/products/edit/{id}", [products::class, 'show'])->name("edit-product")->where("id", '[0-9]+');
+Route::post("/products/update/{id}", [products::class, 'update'])->name("update-product")->where("id", '[0-9]+');
+Route::get("/products/delete/{id}", [products::class, 'destroy'])->name("delete-product")->where("id", '[0-9]+');

@@ -1,4 +1,4 @@
-@php($url = '/')
+@php($url = '/pharm/public/')
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +51,9 @@
                             class="fa-solid fa-notes-medical fa-fw me-3"></i><span>Categories</span></a>
                     <a href={{ route('type') }} class="list-group-item list-group-item-action py-2 ripple type"><i
                             class="fa-solid fa-notes-medical fa-fw me-3"></i><span>Medicine Types</span></a>
+                    <a href={{ route('product') }}
+                        class="list-group-item list-group-item-action py-2 ripple product"><i
+                            class="fa-solid fa-list fa-fw me-3"></i><span>Products</span></a>
                 </div>
             </div>
         </nav>
