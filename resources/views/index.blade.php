@@ -24,7 +24,7 @@
     <header>
         <!-- Sidebar -->
         <nav id="sidebarMenu" class="sidebar-links collapse d-lg-block sidebar collapse bg-white">
-            <div class="position-sticky">
+            <div class=""style="overflow-y:auto;height:550px">
                 <div class="list-group list-group-flush mx-3 mt-4">
                     <a href={{ route('dashboard') }}
                         class="list-group-item list-group-item-action py-2 ripple dashboard" aria-current="true">
@@ -54,6 +54,9 @@
                     <a href={{ route('product') }}
                         class="list-group-item list-group-item-action py-2 ripple product"><i
                             class="fa-solid fa-list fa-fw me-3"></i><span>Products</span></a>
+                    <a href={{ route('receiving') }}
+                        class="list-group-item list-group-item-action py-2 ripple receiving"><i
+                            class="fa-solid fa-file-alt fa-fw me-3"></i><span>Receiving</span></a>
                 </div>
             </div>
         </nav>

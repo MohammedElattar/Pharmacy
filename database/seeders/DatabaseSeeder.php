@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
             partners::class,
             types::class,
             categories::class,
-            products::class
+            products::class,
+            customers::class
         ]);
     }
 }

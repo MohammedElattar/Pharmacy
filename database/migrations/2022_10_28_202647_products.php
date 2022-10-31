@@ -19,6 +19,9 @@ return new class extends Migration
             $tbl->text("description");
             $tbl->boolean("require_reciepnt")->default("0");
             $tbl->integer("concentration", false, true);
+            $tbl->integer("qty")->default("0");
+            $tbl->double("price")->default("0");
+            $tbl->timestamp("exp");
             $tbl->bigInteger("med_type", false, true);
             $tbl->bigInteger("category_id", false, true);
             $tbl->foreign("med_type")->on("medicine_types")->references("id")->onUpdate("cascade")->onDelete("cascade");

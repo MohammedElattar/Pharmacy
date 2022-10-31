@@ -1,8 +1,8 @@
 @extends('index')
 @php
-    $main_name = 'product';
-    $message = 'Product';
-    $title = 'Products';
+    $main_name = 'receiving';
+    $message = 'Receiving';
+    $title = 'Receiving';
 @endphp
 @section('title', $title)
 @section('content')
@@ -26,30 +26,29 @@
         <thead class="text-center">
             <tr>
                 <td>ID</td>
-                <td>Product Info</td>
-                <td>Category</td>
-                <td>Type</td>
-                <td>Added</td>
+                <td>Details</td>
+                <td>Supplier</td>
+                <td>Exp</td>
                 <td>Action</td>
             </tr>
         <tbody>
-            @foreach ($products as $i)
+            @foreach ($receiving as $i)
                 <tr>
                     <td>
                         {{ $i->id }}
                     </td>
                     <td>
-                        Name : <span class="fw-b text-truncate">{{ $i->prod_name }}</span><br>
-                        Description : <span class="text-truncate">{{ $i->prod_desc }}</span><br>
-                        Concentration :<span class="text-truncate">{{ $i->conc }} mg</span><br>
-                        {!! $i->recp ? 'Preception : <div class="badge bg-warning">This Product Require Preception</div>' : '' !!}
+                        Product : <span class="fw-b text-truncate">{{ $i->prod_name }}</span><br>
+                        Qty : <span class="text-truncate">{{ $i->qty }}</span><br>
+                        Total : <span class="text-truncate">{{ $i->price * $i->qty }}</span><br>
                     </td>
-                    <td>{{ $i->cat }}</td>
-                    <td>{{ $i->med_type }}</td>
                     <td>
-                        {{ date('d/M/Y', strtotime($i->created_at)) }}
+                        {{ $i->supp_name }}
                     </td>
-                    <td class="d-flex flex-column">
+                    <td>
+                        {{ date('d-M-Y', strtotime($i->exp)) }}
+                    </td>
+                    <td class="d-flex flex-row justify-content-center">
                         <a href={{ route("edit-$main_name", ['id' => $i->id]) }} class="btn btn-success">Edit</a>
                         <a href={{ route("delete-$main_name", ['id' => $i->id]) }} class="btn btn-danger">Delete</a>
                     </td>
@@ -67,9 +66,6 @@
         });
         setTimeout(() => {
             $(@json('.added-' . $main_name)).css("display", 'none')
-        }, 2000);
-        setTimeout(() => {
-            $(@json('.updated-' . $main_name)).css("display", 'none')
         }, 2000);
         setTimeout(() => {
             $(@json('.deleted-' . $main_name)).css("display", 'none')
