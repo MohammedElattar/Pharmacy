@@ -60,11 +60,11 @@ composer install
 - last thing is to copy all information in `.env.example` file and paste it in `.env` file
 
 
--In `.env` file rename the `DB_DATABASE` to that db_name you've created in `phpmyadmin`
+- In `.env` file rename the `DB_DATABASE` to that db_name you've created in `phpmyadmin`
 
 
 ```php
-DB_DATABASE=Your_Name_HERE
+DB_DATABASE= Your_Name_HERE
 ```
 
 ## Running The Migration to get db information
@@ -79,6 +79,7 @@ php artisan migrate:refersh
 ```console
 php artian db:seed
 ```
+## Running Your Project Live
 
 - Finally You Need To Start The Server
 
