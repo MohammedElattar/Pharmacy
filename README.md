@@ -35,13 +35,9 @@ This project is a way to manage a pharmacy including sales , medicines , custome
 
 - [How to create a database in phpmyadin](https://www.youtube.com/watch?v=IZCi0MTmeqA)
 
-## Installing New Laravel Project To Get The pakages
+## Setting Up The Project
 
-- First create new laravel project
-
-```console
-composer create-project laravel/laravel example-app
-```
+### First You Need to clone the project from the following command
 
 - Open CMD and type the following command
 
@@ -49,21 +45,32 @@ composer create-project laravel/laravel example-app
 git clone https://github.com/MohammedElattar/Pharmacy.git
 ```
 
-- Go to `Pharmacy` directory and copy all files in it
+- Go to `Pharmacy` directory :
 
-- paste it in  `example-app`
-
--Now you need to open `.env` file and you will find that block of code
-
-```php
-DB_DATABASE=pharmacy
+```console
+cd Pharmacy
 ```
 
-- All you need to do is to change laravel to the Database name you've created in our `phpmyadmin` page
+- Now You Need To Install All Dependcies using `Composer`
 
-- next You need to run the migration file and seeders using the following command
+```console
+composer install
+```
 
--now open `Cmd` in Your `example-app` directory and Type These Commands
+- last thing is to copy all information in `.env.example` file and paste it in `.env` file
+
+
+-In `.env` file rename the `DB_DATABASE` to that db_name you've created in `phpmyadmin`
+
+
+```php
+DB_DATABASE=Your_Name_HERE
+```
+
+## Running The Migration to get db information
+
+
+- Open `Cmd` And Type These Commands
 
 ```console
 php artisan migrate:refersh
