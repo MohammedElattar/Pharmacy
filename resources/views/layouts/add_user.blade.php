@@ -55,7 +55,6 @@
                 <label for="role" class="form-label">Select Role</label>
                 <select class="form-control" id="role" name="role">
                     <option value="2">Admin</option>
-                    <option value="0">Customer</option>
                     <option value="1">Cachier</option>
                 </select>
             </div>

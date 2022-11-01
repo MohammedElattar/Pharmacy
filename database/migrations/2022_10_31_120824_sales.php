@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create("sales", function (Blueprint $tbl) {
             $tbl->id();
             $tbl->bigInteger("product", false, true);
-            $tbl->foreign("product")->on("products")->references("id")->onUpdate('cascade')->onDelete('cascade');
             $tbl->string("details", 200);
             $tbl->timestamp("created_at")->useCurrent();
             $tbl->timestamp("updated_at")->useCurrent();
+            $tbl->foreign("product")->on("products")->references("id")->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropDatabaseIfExists("sales");
+        Schema::dropIfExists("sales");
     }
 };

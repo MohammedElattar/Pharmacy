@@ -15,11 +15,12 @@ class categories extends Seeder
      */
     public function run()
     {
-        $faker = \Faker\Factory::create();
-        for ($i = 0; $i < 20; $i++) {
-            DB::table("medicine_categories")->insert([
-                "name" => $faker->name()
-            ]);
-        }
+        // * for testing
+        // $faker = \Faker\Factory::create();
+        // for ($i = 0; $i < 20; $i++) {
+        //     DB::table("medicine_categories")->insert([
+        //         "name" => $faker->name()
+        //     ]);
+        // }
     }
 }

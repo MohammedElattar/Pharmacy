@@ -24,8 +24,8 @@ return new class extends Migration
             $tbl->timestamp("exp");
             $tbl->bigInteger("med_type", false, true);
             $tbl->bigInteger("category_id", false, true);
-            $tbl->foreign("med_type")->on("medicine_types")->references("id")->onUpdate("cascade")->onDelete("cascade");
-            $tbl->foreign("category_id")->on("medicine_categories")->references("id")->onUpdate("cascade")->onDelete("cascade");
+            $tbl->foreign("med_type")->on("medicine_types")->references("id")->cascadeOnUpdate()->cascadeOnDelete();
+            $tbl->foreign("category_id")->on("medicine_categories")->references("id")->cascadeOnUpdate()->cascadeOnDelete();
             $tbl->timestamp("created_at")->useCurrent();
             $tbl->timestamp("updated_at")->useCurrent();
         });

@@ -39,7 +39,7 @@
                 @endforeach
             </div>
         @endif
-        <form action="auth-user" method="POST">
+        <form action="{{ route('auth-user') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>

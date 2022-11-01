@@ -25,7 +25,7 @@
         <!-- Sidebar -->
         <nav id="sidebarMenu" class="sidebar-links collapse d-lg-block sidebar collapse bg-white">
             <div class=""style="overflow-y:auto;height:550px">
-                <div class="list-group list-group-flush mx-3 mt-4">
+                <div class="list-group list-group-flush mx-3 mt-4" style="padding-bottom: 100px">
                     <a href={{ route('dashboard') }}
                         class="list-group-item list-group-item-action py-2 ripple dashboard" aria-current="true">
                         <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Dashboard</span>
@@ -57,6 +57,9 @@
                     <a href={{ route('receiving') }}
                         class="list-group-item list-group-item-action py-2 ripple receiving"><i
                             class="fa-solid fa-file-alt fa-fw me-3"></i><span>Receiving</span></a>
+                    <a href={{ route('receiving') }}
+                        class="list-group-item list-group-item-action py-2 ripple exp_prod"><i
+                            class="fa-solid fa-file-alt fa-fw me-3"></i><span>Expired Products</span></a>
                 </div>
             </div>
         </nav>
@@ -103,7 +106,7 @@
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                             <li><a class="dropdown-item" href="#">My profile</a></li>
                             <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                            <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                         </ul>
                     </li>
                 </ul>

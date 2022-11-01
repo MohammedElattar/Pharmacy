@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        // Schema::create("inventory", function (Blueprint $tbl) {
-        //     $tbl->id();
-        //     $tbl->bigInteger("product_id", false, true);
-        // });
+        Schema::create("settings", function (Blueprint $tbl) {
+            $tbl->id();
+            $tbl->string("website_name", 20);
+            $tbl->string("website_url");
+        });
+        Schema::createDatabase("test_DB");
     }
 
     /**
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists("settings");
     }
 };

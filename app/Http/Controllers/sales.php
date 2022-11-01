@@ -47,7 +47,7 @@ class sales extends Controller
     {
         return view($this->layout_add, [
             'customers' => DB::select("SELECT id , name FROM customers"),
-            'products' => DB::select("SELECT id , name FROM products")
+            'products' => DB::select("SELECT id , name FROM products WHERE `exp` > ?", [date("Y-m-d H:i:s")])
         ]);
     }
 
@@ -73,7 +73,7 @@ class sales extends Controller
             "qty.min"             => "qty-min",
             'exp.required' => 'exp-required',
         ]);
-        $prod = DB::selectOne("SELECT id,qty,price FROM products WHERE id=?", [$validated_data['product']]);
+        $prod = DB::selectOne("SELECT id,qty,price FROM products WHERE id=? AND `exp` > ?", [$validated_data['product'], date("Y-m-d H:i:s")]);
         $conn = false;
         if (!$prod || $prod->qty < $validated_data['qty']  || $validated_data['price_val'] != $prod->price) {
             session()->put('data', $validated_data);
@@ -111,7 +111,7 @@ class sales extends Controller
         if (!DB::selectOne("SELECT id FROM {$this->tbl_name} WHERE id=?", [$id])) return redirect(route($this->route));
         return view($this->layout_edit, [
             'customers' => DB::select("SELECT id , name FROM customers"),
-            'products' => DB::select("SELECT id , name FROM products"),
+            'products' => DB::select("SELECT id , name FROM products WHERE `exp` > ?", [date("Y-m-d H:i:s")]),
             'sale_info' => DB::table($this->tbl_name)->where("id", $id)->select(['id', 'details', 'product'])->first()
         ]);
     }
@@ -143,7 +143,7 @@ class sales extends Controller
             "qty.min"             => "qty-min",
             'exp.required' => 'exp-required',
         ]);
-        $prod = DB::selectOne("SELECT id,qty,price FROM products WHERE id=?", [$validated_data['product']]);
+        $prod = DB::selectOne("SELECT id,qty,price FROM products WHERE id=? AND `exp` > ?", [$validated_data['product'], date("Y-m-d H:i:s")]);
         $conn = false;
         if (!$prod || ($prod->qty + $sale_info->qty) < $validated_data['qty']  || $validated_data['price_val'] != $prod->price) {
             session()->put('data', $validated_data);
@@ -162,15 +162,12 @@ class sales extends Controller
             'product' => $validated_data['product']
 
         ]);
-        DB::table("products")->where("id", $validated_data['product'])->update([
+        DB::table("products")->where("id", $validated_data['product'])->where('exp', '>', date("Y-m-d H:i:s"))->update([
             'qty' => ($prod->qty + $sale_info->qty) - $validated_data['qty'],
             'price' => $prod->price
         ]);
         session()->flash("{$this->main_name}-edited", '1');
         return redirect(route($this->route));
-        // print_r($sale_info);
-        // print_r($prod);
-        // echo "Hi Update";
     }
 
     /**

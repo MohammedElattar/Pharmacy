@@ -56,7 +56,6 @@
                 <label for="role" class="form-label">Select Role</label>
                 <select class="form-control" id="role" name="role">
                     <option value="2" {{ $user->role == '2' ? 'selected' : '' }}>Admin</option>
-                    <option value="0" {{ $user->role == '0' ? 'selected' : '' }}>Customer</option>
                     <option value="1" {{ $user->role == '1' ? 'selected' : '' }}>Cachier</option>
                 </select>
             </div>

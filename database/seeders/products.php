@@ -15,16 +15,18 @@ class products extends Seeder
      */
     public function run()
     {
-        $faker = \Faker\Factory::create();
-        for ($i = 0; $i < 20; $i++) {
-            DB::table("products")->insert([
-                "name" => $faker->name(),
-                "description" => $faker->name(),
-                "concentration" => $faker->randomNumber(),
-                "require_reciepnt" => '1',
-                'category_id' => $faker->numberBetween(1, 10),
-                'med_type' => $faker->numberBetween(1, 10)
-            ]);
-        }
+        // * for testing
+
+        // $faker = \Faker\Factory::create();
+        // for ($i = 0; $i < 20; $i++) {
+        //     DB::table("products")->insert([
+        //         "name" => $faker->name(),
+        //         "description" => $faker->name(),
+        //         "concentration" => $faker->randomNumber(),
+        //         "require_reciepnt" => '1',
+        //         'category_id' => $faker->numberBetween(1, 10),
+        //         'med_type' => $faker->numberBetween(1, 10)
+        //     ]);
+        // }
     }
 }

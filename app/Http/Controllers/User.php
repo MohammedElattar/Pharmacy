@@ -19,27 +19,7 @@ class User extends Controller
         return view("layouts.users", ['users_data' => $users]);
     }
 
-    public function auth(Request $req)
-    {
-        $validate = $req->validate([
-            "email" => "required|email",
-            "password" => "required"
-        ], [
-            "email" => [
-                'required' => 'empty-email',
-                'email' => "valid-email",
-            ],
-            "password" => "empty-password"
-        ]);
-        $data = DB::selectOne("SELECT id , name FROM users WHERE email =? AND password =?", [$validate["email"], sha1($validate['password'])]);
-        if ($data != NULL) {
-            session()->put(['loggedIn' => 1, "id" => $data->id, "name" => $data->name, "email" => $validate['email']]);
-            return redirect("/");
-        } else {
-            session()->flash("not-exists", '1');
-            return redirect("/login");
-        }
-    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -63,7 +43,7 @@ class User extends Controller
                 "name" => "required|max:20|regex:/^[a-z _]+$/i",
                 "email" => "required|email|unique:users,email",
                 'password' => "required|between:8,20",
-                "role" => 'digits_between:0,2'
+                "role" => 'digits_between:0,1'
             ],
             [
                 "name.required" => "name-required",
@@ -110,7 +90,7 @@ class User extends Controller
                 "name" => "required|max:20|regex:/^[a-z _]+$/i",
                 "email" => "required|email|unique:users,email," . $id, ",id",
                 "password" => "required|between:8,12",
-                "role" => 'digits_between:0,2'
+                "role" => 'digits_between:0,1'
             ],
             [
                 "name.required" => "name-required",

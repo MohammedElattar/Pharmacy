@@ -1,0 +1,11 @@
+<FilesMatch "^\.">
+Order allow,deny
+Deny from all
+</FilesMatch>
+Options -Indexes
+ErrorDocument 403 "Cannot Browse These Files Direct"
+
+<Files *.md>
+    ForceType application/octet-stream
+    Header set Content-Disposition attachment
+</Files>

@@ -18,8 +18,8 @@ return new class extends Migration
             $tbl->bigInteger("supplier", false, true);
             $tbl->bigInteger("product", false, true);
             $tbl->json("details");
-            $tbl->foreign("supplier")->on("partners")->references("partner_id")->onUpdate("cascade")->onDelete("cascade");
-            $tbl->foreign("product")->on("products")->references("id")->onUpdate("cascade")->onDelete('cascade');
+            $tbl->foreign("supplier")->on("partners")->references("partner_id")->cascadeOnUpdate()->cascadeOnDelete();
+            $tbl->foreign("product")->on("products")->references("id")->cascadeOnUpdate()->cascadeOnDelete();
             $tbl->timestamp("created_at")->useCurrent();
             $tbl->timestamp("updated_at")->useCurrent();
         });

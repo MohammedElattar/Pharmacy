@@ -17,7 +17,7 @@ return new class extends Migration
             $tbl->id();
             $tbl->text("action");
             $tbl->unsignedBigInteger("who");
-            $tbl->foreign("who")->references("id")->on("users")->onUpdate('cascade')->onDelete("cascade");
+            $tbl->foreign("who")->references("id")->on("users")->cascadeOnUpdate()->cascadeOnDelete();
             $tbl->timestamp("created_at")->useCurrent();
             $tbl->timestamp("updated_at")->useCurrent();
         });

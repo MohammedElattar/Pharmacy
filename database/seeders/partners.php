@@ -15,11 +15,12 @@ class partners extends Seeder
      */
     public function run()
     {
-        $faker = \Faker\Factory::create();
-        for ($i = 0; $i < 100; $i++) {
-            DB::table("partners")->insert([
-                "name" => $faker->name(),
-            ]);
-        }
+        // * for testing
+        // $faker = \Faker\Factory::create();
+        // for ($i = 0; $i < 100; $i++) {
+        //     DB::table("partners")->insert([
+        //         "name" => $faker->name(),
+        //     ]);
+        // }
     }
 }
