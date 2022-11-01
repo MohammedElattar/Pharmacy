@@ -42,7 +42,7 @@
                     <a href={{ route('customer') }}
                         class="list-group-item list-group-item-action py-2 ripple customer"><i
                             class="fas fa-users fa-fw me-3"></i><span>Customers</span></a>
-                    <a href="#" class="list-group-item list-group-item-action py-2 ripple sales"><i
+                    <a href={{ route('sale') }} class="list-group-item list-group-item-action py-2 ripple sale"><i
                             class="fas fa-money-bill fa-fw me-3"></i><span>Sales</span></a>
                     <a href={{ route('logs') }} class="list-group-item list-group-item-action py-2 ripple logs"><i
                             class="fas fa-history fa-fw me-3"></i><span>Logs</span></a>
@@ -136,3 +136,4 @@
 <script>
     // document.querySelector(".active").removeAttribute("href")
 </script>
+@yield('ajx')

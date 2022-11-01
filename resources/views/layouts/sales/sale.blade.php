@@ -1,8 +1,8 @@
 @extends('index')
 @php
-    $main_name = 'receiving';
-    $message = 'Receiving';
-    $title = 'Receiving';
+    $main_name = 'sale';
+    $message = 'Sale';
+    $title = 'Sales';
 @endphp
 @section('title', $title)
 @section('content')
@@ -27,27 +27,29 @@
             <tr>
                 <td>ID</td>
                 <td>Details</td>
-                <td>Supplier</td>
-                <td>Exp</td>
+                <td>Product</td>
+                <td>Made In</td>
                 <td>Action</td>
             </tr>
         <tbody>
-            @foreach ($receiving as $i)
+            @foreach ($sales as $i)
                 <tr>
                     <td>
                         {{ $i->id }}
                     </td>
                     <td>
-                        Product : <span class="fw-b text-truncate">{{ $i->prod_name }}</span><br>
-                        Qty : <span class="text-truncate">{{ $i->qty }}</span><br>
-                        Price : <span class="text-truncate">{{ $i->price }}</span><br>
-                        Total : <span class="text-truncate">{{ $i->price * $i->qty }}</span><br>
+                        @php
+                            $s = json_decode($i->details);
+                        @endphp
+                        Qty : <span class="text-truncate">{{ $s->qty }}</span><br>
+                        Price : <span class="text-truncate">{{ $s->price }}</span><br>
+                        Total : <span class="text-truncate">{{ $s->price * $s->qty }}</span><br>
                     </td>
                     <td>
-                        {{ $i->supp_name }}
+                        {{ $i->prod_name }}
                     </td>
                     <td>
-                        {{ date('d-M-Y', strtotime($i->exp)) }}
+                        {{ date('d-M-Y h:i:s', strtotime($i->created_at)) }}
                     </td>
                     <td class="d-flex flex-row justify-content-center">
                         <a href={{ route("edit-$main_name", ['id' => $i->id]) }} class="btn btn-success">Edit</a>

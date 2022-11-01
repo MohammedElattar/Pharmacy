@@ -1,36 +1,37 @@
 @extends('index')
 @php
-    $main_name = 'receiving';
-    $message = 'Receiving';
-    $title = 'Edit Receiving';
-    print_r($prod_info);
+    $main_name = 'sale';
+    $message = 'Sale';
     $data = session()->get('data');
     $error = session()->get('error');
+    $details = json_decode($sale_info->details);
     if (isset($data) && !$data) {
         unset($data);
     }
     if (isset($error) && !$error) {
         unset($error);
     }
+    // print_r(session()->all());
 @endphp
 @section('title', "Edit $message")
 @section('content')
     <div style="width: 60%;margin:auto">
         <h3 class="text-center">Edit {{ $message }}</h3>
         <div class="alert alert-info">Total Price : <span class="tprice"
-                style="font-weight: bold">{{ $prod_info->qty * $prod_info->price }}</span></div>
+                style="font-weight: bold">{{ $details->qty * $details->price }}</span></div>
         @if ($errors->any() || isset($error))
+            {{-- {{ $errors }} --}}
             <div class="alert alert-danger text-center">
-                @if ($error == 'supp')
-                    Supplier doesn't exists
-                @elseif ($error == 'prod')
+                @if ($error == 'prod')
                     Product doesn't Exists
+                @elseif ($error == 'qty')
+                    Qty Is Bigger Than Existing Qty
+                @elseif($error == 'price')
+                    Price Must Be Greater Than 0
                 @endif
                 @php
                     $er = [
                         'prod-required' => 'No Products Exists',
-                        'prod-exists' => 'Some Receive Has The Same Product ID',
-                        'supp-required' => 'No Suppliers Exist',
                         'qty.required' => 'Quantity Cannot Be Empty',
                         'qty-num' => 'Quantity Must Be Numeric',
                         'qty-min' => 'Quantity Must Be Greater Than 0',
@@ -48,7 +49,7 @@
                 @endphp
             </div>
         @endif
-        <form action={{ route("update-$main_name", ['id' => $prod_info->id]) }} method="POST">
+        <form action={{ route("update-$main_name", ['id' => $sale_info->id]) }} method="POST">
             @csrf
             <div class="mb-3">
                 <label for="product">Products</label>
@@ -57,19 +58,19 @@
                     {!! $products ? '' : "<option value='0'>No Product</option>" !!}
                     @foreach ($products as $i)
                         <option value={{ $i->id }}
-                            {{ @$data['product'] == $i->id || old('product') == $i->id || $prod_info->product == $i->id ? 'selected' : '' }}>
+                            {{ @$data['product'] == $i->id || old('product') == $i->id || $sale_info->product == $i->id ? 'selected' : '' }}>
                             {{ $i->name }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="mb-3">
-                <label for="supplier">Suppliers</label>
-                <select name="supplier" class="form-control"class="form-control">
+                <label for="customer">Customers</label>
+                <select name="customer"class="form-control">
                     {{-- print without scaping characters --}}
-                    {!! $suppliers ? '' : "<option value='0'>No Type Supplier</option>" !!}
-                    @foreach ($suppliers as $i)
+                    {!! $customers ? '' : "<option value='0'>No Customer</option>" !!}
+                    @foreach ($customers as $i)
                         <option value={{ $i->id }}
-                            {{ @$data['supplier'] == $i->id || old('supplier') == $i->id || $prod_info->supplier == $i->id ? 'selected' : '' }}>
+                            {{ @$data['customer'] == $i->id || old('customer') == $i->id ? 'selected' : '' }}>
                             {{ $i->name }}</option>
                     @endforeach
                 </select>
@@ -77,19 +78,16 @@
             <div class="mb-3">
                 <label for="qty">Quantity</label>
                 <input type="number" name="qty" id="qty"class="form-control"
-                    value="{{ isset($data['qty']) ? $data['qty'] : (old('qty') ? old('qty') : $prod_info->qty) }}">
+                    value="{{ isset($data['qty']) ? $data['qty'] : (old('qty') ? old('qty') : $details->qty) }}">
             </div>
             <div class="mb-3">
                 <label for="price">Price</label>
-                <input type="number" name="price" id="price"class="form-control"
-                    value="{{ isset($data['price']) ? $data['price'] : (old('price') ? old('price') : $prod_info->price) }}">
+                <input type="number" id="price"class="form-control"
+                    value="{{ isset($data['price']) ? $data['price'] : (old('price') ? old('price') : $details->price) }}"
+                    disabled>
+                <input type="hidden" name="price_val" id="price_val" value="{{ $details->price }}">
             </div>
-            <div class="mb-3">
-                <label for="exp">Expiration Date</label>
-                <input type="date" name="exp" id="exp"
-                    value={{ isset($date['exp']) ? $data['exp'] : (old('exp') ? old('exp') : $prod_info->exp) }}>
-            </div>
-            <input type="submit" value="Update {{ $message }}" class="btn btn-primary">
+            <input type="submit" value="Edit {{ $message }}" class="btn btn-primary">
         </form>
     </div>
     <script>
@@ -121,3 +119,36 @@
     session()->forget('error');
     session()->forget('data');
 @endphp
+
+@section('ajx')
+    <script>
+        let prod = document.querySelector("[name=product]");
+        prod.addEventListener("change", () => {
+            getData(document.querySelector('[name=product]').value)
+        })
+
+        function getData(id) {
+            $.ajax({
+                type: "POST",
+                url: `{{ route('ajx', ['obj' => 'products', 'operation' => 'show']) }}`,
+                data: {
+                    id: id,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(res) {
+                    res = JSON.parse(res);
+                    if ('success' in res) {
+                        let qty = res['data']['qty'],
+                            price = res['data']['price'];
+                        $("#price").val(price);
+                        $("#price_val").val(price)
+                        $(".tprice").html(price * $("#qty").val())
+                    } else console.log(res)
+                },
+                error: (xhr) => {
+                    console.log("Your Error is ", xhr.responseText)
+                }
+            });
+        }
+    </script>
+@endsection

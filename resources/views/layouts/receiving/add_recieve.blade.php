@@ -23,12 +23,11 @@
                     Supplier doesn't exists
                 @elseif ($error == 'prod')
                     Product doesn't Exists
-                @elseif($error == 'exp')
-                    Exp Date Must Be In The Future
                 @endif
                 @php
                     $er = [
                         'prod-required' => 'No Products Exists',
+                        'prod-exists' => 'Some Receive Has The Same Product ID',
                         'supp-required' => 'No Suppliers Exist',
                         'qty.required' => 'Quantity Cannot Be Empty',
                         'qty-num' => 'Quantity Must Be Numeric',

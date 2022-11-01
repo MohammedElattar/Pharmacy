@@ -5,37 +5,30 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class receiving extends Controller
+class sales extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    private $tbl_name = "receiving";
-    private $layout = "layouts.receiving.recieve";
-    private $layout_add = "layouts.receiving.add_recieve";
-    private $layout_edit = "layouts.receiving.edit_recieve";
-    private $main_name = "receiving";
-    private $route = "receiving";
-    private $message = "Receive";
+    private $tbl_name = "sales";
+    private $layout = "layouts.sales.sale";
+    private $layout_add = "layouts.sales.add_sale";
+    private $layout_edit = "layouts.sales.edit_sale";
+    private $main_name = "sale";
+    private $route = "sale";
+    private $message = "Sale";
     public function index()
     {
         $cats = DB::select(
             "SELECT
                 {$this->tbl_name}.id as id ,
-                partners.name as supp_name,
+                {$this->tbl_name}.details,
                 products.name as prod_name,
-                products.qty as qty,
-                products.price as price,
-                products.exp as exp,
                 {$this->tbl_name}.created_at
             FROM
                 {$this->tbl_name}
-            JOIN
-                partners
-            ON
-                partners.partner_id={$this->tbl_name}.supplier
             JOIN
                 products
             ON
@@ -53,7 +46,7 @@ class receiving extends Controller
     public function create()
     {
         return view($this->layout_add, [
-            'suppliers' => DB::select("SELECT partner_id as id , name FROM partners"),
+            'customers' => DB::select("SELECT id , name FROM customers"),
             'products' => DB::select("SELECT id , name FROM products")
         ]);
     }
@@ -67,29 +60,24 @@ class receiving extends Controller
     public function store(Request $request)
     {
         $validated_data = $request->validate([
-            "product"          => "required|unique:{$this->tbl_name},product",
-            "supplier"         => "required",
+            "product"          => "required",
             "qty"       => "required|numeric|min:1",
-            "price" => "required|numeric|min:0.1",
-            'exp' => 'required|date'
+            "price_val" => "required|numeric|min:0.1",
         ], [
             "product.required"   => "prod-required",
-            'product.unique'       => 'prod-exists',
-            "supplier.required"   => "supp-required",
-            "price.required"      => "price-required",
-            "price.numeric"       => "price-num",
-            "price.min"           => "price-min",
+            "price_val.required"      => "price-required",
+            "price_val.numeric"       => "price-num",
+            "price_val.min"           => "price-min",
             "qty.required"        => "qty-required",
             "qty.numeric"         => "qty-num",
             "qty.min"             => "qty-min",
             'exp.required' => 'exp-required',
         ]);
-        $supp = DB::selectOne("SELECT partner_id FROM partners WHERE partner_id=?", [$validated_data['supplier']]) ? true : false;
-        $prod = DB::selectOne("SELECT id FROM products WHERE id=?", [$validated_data['product']]) ? true : false;
+        $prod = DB::selectOne("SELECT id,qty,price FROM products WHERE id=?", [$validated_data['product']]);
         $conn = false;
-        if (!$supp || !$prod) {
-            session()->put('data', $request->all());
-            session()->put('error', !$prod ? 'prod' : 'supp');
+        if (!$prod || $prod->qty < $validated_data['qty']  || $validated_data['price_val'] != $prod->price) {
+            session()->put('data', $validated_data);
+            session()->put('error', !$prod ? 'prod' : ($prod->qty < $validated_data['qty'] ? 'qty' : 'price'));
             $conn = true;
         }
         if ($conn) {
@@ -97,17 +85,17 @@ class receiving extends Controller
             die;
         }
         DB::table($this->tbl_name)->insert([
-            'supplier' => $validated_data['supplier'],
             'details' => json_encode([
                 'qty' => $validated_data['qty'],
-                'price' => $validated_data['price'],
-                'total_price' => $validated_data['qty'] * $validated_data['price'],
-                'exp' => $validated_data['exp']
+                'price' => $validated_data['price_val']
             ]),
             'product' => $validated_data['product']
 
         ]);
-        DB::update("UPDATE products SET qty=? , price =? , `exp`=? WHERE id =?", [$validated_data['qty'], $validated_data['price'], $validated_data['exp'], $validated_data['product']]);
+        DB::table("products")->where("id", $validated_data['product'])->update([
+            'qty' => $prod->qty - $validated_data['qty'],
+            'price' => $prod->price
+        ]);
         session()->flash("{$this->main_name}-added", '1');
         return redirect(route($this->route));
     }
@@ -122,26 +110,9 @@ class receiving extends Controller
     {
         if (!DB::selectOne("SELECT id FROM {$this->tbl_name} WHERE id=?", [$id])) return redirect(route($this->route));
         return view($this->layout_edit, [
-            'suppliers' => DB::select("SELECT partner_id as id , name FROM partners"),
+            'customers' => DB::select("SELECT id , name FROM customers"),
             'products' => DB::select("SELECT id , name FROM products"),
-            'prod_info' => DB::selectOne(
-                "SELECT
-                    {$this->tbl_name}.id as id,
-                    product ,
-                    supplier ,
-                    products.qty as qty ,
-                    products.price as price ,
-                    products.exp as `exp`
-                FROM
-                    {$this->tbl_name}
-                JOIN
-                    products
-                ON
-                    products.id = receiving.product
-                WHERE {$this->tbl_name}.id=?
-            ",
-                [$id]
-            )
+            'sale_info' => DB::table($this->tbl_name)->where("id", $id)->select(['id', 'details', 'product'])->first()
         ]);
     }
 
@@ -155,31 +126,28 @@ class receiving extends Controller
     public function update(Request $request, $id)
     {
 
-        if (!DB::selectOne("SELECT id FROM {$this->tbl_name} WHERE id=?", [$id])) return redirect(route($this->route));
+        $sale_info = DB::selectOne("SELECT details FROM {$this->tbl_name} WHERE id=?", [$id]);
+        if (!$sale_info) return redirect(route($this->route));
+        $sale_info = json_decode($sale_info->details);
         $validated_data = $request->validate([
-            "product"          => "required|unique:{$this->tbl_name},product,$id,id",
-            "supplier"         => "required",
+            "product"          => "required",
             "qty"       => "required|numeric|min:1",
-            "price" => "required|numeric|min:0.1",
-            'exp' => 'required|date'
+            "price_val" => "required|numeric|min:0.1",
         ], [
             "product.required"   => "prod-required",
-            'product.unique'       => 'prod-exists',
-            "supplier.required"   => "supp-required",
-            "price.required"      => "price-required",
-            "price.numeric"       => "price-num",
-            "price.min"           => "price-min",
+            "price_val.required"      => "price-required",
+            "price_val.numeric"       => "price-num",
+            "price_val.min"           => "price-min",
             "qty.required"        => "qty-required",
             "qty.numeric"         => "qty-num",
             "qty.min"             => "qty-min",
             'exp.required' => 'exp-required',
         ]);
-        $supp = DB::selectOne("SELECT partner_id FROM partners WHERE partner_id=?", [$validated_data['supplier']]) ? true : false;
-        $prod = DB::selectOne("SELECT id FROM products WHERE id=?", [$validated_data['product']]) ? true : false;
+        $prod = DB::selectOne("SELECT id,qty,price FROM products WHERE id=?", [$validated_data['product']]);
         $conn = false;
-        if (!$supp || !$prod) {
-            session()->put('data', $request->all());
-            session()->put('error', !$prod ? 'prod' : 'supp');
+        if (!$prod || ($prod->qty + $sale_info->qty) < $validated_data['qty']  || $validated_data['price_val'] != $prod->price) {
+            session()->put('data', $validated_data);
+            session()->put('error', !$prod ? 'prod' : ($prod->qty < $validated_data['qty'] ? 'qty' : 'price'));
             $conn = true;
         }
         if ($conn) {
@@ -187,23 +155,22 @@ class receiving extends Controller
             die;
         }
         DB::table($this->tbl_name)->where('id', $id)->update([
-            'supplier' => $validated_data['supplier'],
             'details' => json_encode([
                 'qty' => $validated_data['qty'],
-                'price' => $validated_data['price'],
-                'total_price' => $validated_data['qty'] * $validated_data['price'],
-                'exp' => $validated_data['exp']
+                'price' => $validated_data['price_val']
             ]),
             'product' => $validated_data['product']
+
         ]);
-        DB::table('products')->where('id', $validated_data['product'])->update([
-            'qty' => $validated_data['qty'],
-            'price' => $validated_data['price'],
-            'exp' => $validated_data['exp'],
-            'updated_at' => date("Y-m-d h:i:s")
+        DB::table("products")->where("id", $validated_data['product'])->update([
+            'qty' => ($prod->qty + $sale_info->qty) - $validated_data['qty'],
+            'price' => $prod->price
         ]);
         session()->flash("{$this->main_name}-edited", '1');
         return redirect(route($this->route));
+        // print_r($sale_info);
+        // print_r($prod);
+        // echo "Hi Update";
     }
 
     /**

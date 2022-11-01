@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Ajax;
 use App\Http\Controllers\Logs;
 use App\Http\Controllers\Partners;
 use App\Http\Controllers\User;
@@ -9,6 +10,7 @@ use App\Http\Controllers\medicine_types;
 use App\Http\Controllers\customers;
 use App\Http\Controllers\products;
 use App\Http\Controllers\receiving;
+use App\Http\Controllers\sales;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,7 +112,7 @@ Route::get("/products/edit/{id}", [products::class, 'show'])->name("edit-product
 Route::post("/products/update/{id}", [products::class, 'update'])->name("update-product")->where("id", '[0-9]+');
 Route::get("/products/delete/{id}", [products::class, 'destroy'])->name("delete-product")->where("id", '[0-9]+');
 
-/* Products */
+/* Sales */
 
 Route::get("/receiving", [receiving::class, 'index'])->name("receiving");
 Route::get("/receiving/add", [receiving::class, 'create'])->name("add-receiving");
@@ -118,3 +120,19 @@ Route::post("/receiving/store", [receiving::class, 'store'])->name("store-receiv
 Route::get("/receiving/edit/{id}", [receiving::class, 'show'])->name("edit-receiving")->where("id", '[0-9]+');
 Route::post("/receiving/update/{id}", [receiving::class, 'update'])->name("update-receiving")->where("id", '[0-9]+');
 Route::get("/receiving/delete/{id}", [receiving::class, 'destroy'])->name("delete-receiving")->where("id", '[0-9]+');
+
+/* Receiving */
+
+Route::get("/sales", [sales::class, 'index'])->name("sale");
+Route::get("/sales/add", [sales::class, 'create'])->name("add-sale");
+Route::post("/sales/store", [sales::class, 'store'])->name("store-sale");
+Route::get("/sales/edit/{id}", [sales::class, 'show'])->name("edit-sale")->where("id", '[0-9]+');
+Route::post("/sales/update/{id}", [sales::class, 'update'])->name("update-sale")->where("id", '[0-9]+');
+Route::get("/sales/delete/{id}", [sales::class, 'destroy'])->name("delete-sale")->where("id", '[0-9]+');
+
+// Ajax Call
+
+Route::post("/ajax/{obj}/{operation}", [Ajax::class, 'process'])->name("ajx")->where([
+    "obj" => '[a-z A-z]+',
+    'operation' => '[a-zA-z]+',
+]);
