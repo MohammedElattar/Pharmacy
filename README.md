@@ -64,7 +64,21 @@ composer install
 ```php
 DB_DATABASE= Your_Name_HERE
 ```
+## update url of the project
 
+- open .env file and change that to your folder name
+```console
+APP_ASSETS=/Your_Directory_Name/public/
+```
+
+-open `.htaccess` file and change the url to your url
+
+```php
+# update that path to your path
+
+ErrorDocument 403 https://mohamedattar/pharm
+
+```
 ## Running The Migration to get db information
 
 - Open `Cmd` And Type These Commands
