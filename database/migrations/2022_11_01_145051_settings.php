@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create("settings", function (Blueprint $tbl) {
             $tbl->id();
-            $tbl->string("website_name", 20);
-            $tbl->string("website_url");
+            $tbl->string("website_name", 20)->nullable();
+            $tbl->string("website_url")->nullable();
+            $tbl->boolean("installed")->default('0');
         });
-        Schema::createDatabase("test_DB");
     }
 
     /**

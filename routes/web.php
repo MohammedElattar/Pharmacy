@@ -35,7 +35,8 @@ use Illuminate\Support\Facades\Route;
 Route::get("/login", [Auth::class, 'index'])->name("login");
 Route::post("/auth-user", [Auth::class, 'auth'])->name("auth-user");
 Route::get("/logout", [Logout::class, 'index'])->name("logout");
-// dashboard
+
+
 Route::middleware('auth')->group(function () {
     /* Dashboard */
     Route::get('/', function () {
@@ -155,8 +156,5 @@ Route::middleware('auth')->group(function () {
     /* DB_Controller */
 
     Route::get("/db", [DB_Controller::class, 'index'])->name("db");
+    Route::post("/db/reset_tables", [DB_Controller::class, 'reset'])->name("reset-tables");
 });
-
-
-
-Route::view('/install', 'install');

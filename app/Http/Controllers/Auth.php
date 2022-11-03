@@ -9,11 +9,13 @@ class Auth extends Controller
 {
     public function index()
     {
+        if (session()->has('loggedIn')) return redirect('/');
         return view("login");
     }
 
     public function auth(Request $req)
     {
+        if (session()->has('loggedIn')) return redirect('/');
         $validate = $req->validate([
             "email" => "required|email",
             "password" => "required"

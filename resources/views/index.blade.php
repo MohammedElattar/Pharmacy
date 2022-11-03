@@ -1,4 +1,10 @@
-@php($url = '/pharm/public/')
+@php
+    $x = env('APP_ASSETS');
+    if (!$x) {
+        $x = '/';
+    }
+    $url = $x;
+@endphp
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" href="logo.png">
+    <link rel="icon" href="{{ $url }}logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
         integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -60,6 +66,8 @@
                     <a href={{ route('receiving') }}
                         class="list-group-item list-group-item-action py-2 ripple exp_prod"><i
                             class="fa-solid fa-file-alt fa-fw me-3"></i><span>Expired Products</span></a>
+                    <a href={{ route('db') }} class="list-group-item list-group-item-action py-2 ripple db"><i
+                            class="fa-solid fa-database fa-fw me-3"></i><span>Database</span></a>
                 </div>
             </div>
         </nav>
@@ -136,7 +144,5 @@
 </html>
 
 @yield('active')
-<script>
-    // document.querySelector(".active").removeAttribute("href")
-</script>
+
 @yield('ajx')
