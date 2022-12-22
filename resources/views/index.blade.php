@@ -1,5 +1,5 @@
 @php
-    $x = env('APP_ASSETS');
+    $x = env('APP_ASSETS' , '/');
     if (!$x) {
         $x = '/';
     }

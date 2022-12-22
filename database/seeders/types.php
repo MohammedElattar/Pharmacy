@@ -17,11 +17,11 @@ class types extends Seeder
     {
         // for testing
 
-        // $faker = \Faker\Factory::create();
-        // for ($i = 0; $i < 20; $i++) {
-        //     DB::table("medicine_types")->insert([
-        //         "name" => $faker->name()
-        //     ]);
-        // }
+        $faker = \Faker\Factory::create();
+        for ($i = 0; $i < 20; $i++) {
+            DB::table("medicine_types")->insert([
+                "name" => $faker->name()
+            ]);
+        }
     }
 }

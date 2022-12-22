@@ -29,4 +29,4 @@ Deny from all
 
 # update that path to your path
 
-ErrorDocument 403 https://mohamedattar/pharm
+ErrorDocument 403 https://localhost/IS_Project
